@@ -992,9 +992,16 @@ plot.index.no.arrow.2 <- function(res.18, x, i.color, x.lim, y.lim, paper = FALS
 }
 
 # Arrow location for plots
-pp.x.loc.2 <- -0.093
+## pp.x.loc.2 <- -0.093
 
-draw.arrows.paper.2 <- draw.arrows.four(pp.x.dist.mid, pp.x.dist.end, pp.y.loc, pp.y.dist.mid, pp.y.dist.end, pp.x.loc.2)
+draw.arrows.xaxis <- function(x.dist.mid, x.dist.end, y.loc) {
+  list(
+    draw.arrows(0.5 + x.dist.mid, y.loc, 1 - x.dist.end, y.loc),
+    draw.arrows(0.5 - x.dist.mid, y.loc, 0 + x.dist.end, y.loc)
+  )
+}
+
+draw.arrows.paper.2 <- draw.arrows.xaxis(pp.x.dist.mid, pp.x.dist.end, pp.y.loc)
 
 
 # Y arrow annotation location
@@ -1005,18 +1012,15 @@ pp.yarrow.y.loc.2 <- 0.27
 base.plot.2 <- function(res.18, lm.line.2 = TRUE) {
   p1 <- plot.index.no.arrow.2(res.18, "G", "black", x.lim, y.lim.2, paper = TRUE, lm.line = lm.line.2) + ggtitle("(a) Goods") +
     draw.arrows.paper.2 +
-    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
-    annotate.arrow.y(pp.yarrow.x.loc.2, pp.yarrow.y.loc.2, "da", "from", "G", ffsize = 12)
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12)
 
   p2 <- plot.index.no.arrow.2(res.18, "HTS", "red", x.lim, y.lim.2, paper = TRUE, lm.line = lm.line.2) + ggtitle("(b) Highly Tradable Services") +
     draw.arrows.paper.2 +
-    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
-    annotate.arrow.y(pp.yarrow.x.loc.2, pp.yarrow.y.loc.2, "ad", "to", "HTS", ffsize = 12)
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12)
 
   p3 <- plot.index.no.arrow.2(res.18, "BTS", "blue", x.lim, y.lim.2, paper = TRUE, lm.line = lm.line.2) + ggtitle("(c) Barely Tradable Services") +
     draw.arrows.paper.2 +
-    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
-    annotate.arrow.y(pp.yarrow.x.loc.2, pp.yarrow.y.loc.2, "ad", "to", "BTS", ffsize = 12)
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12)
 
   plot_grid(p1, p2, p3, ncol = 1)
 }
