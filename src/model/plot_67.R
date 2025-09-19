@@ -848,12 +848,108 @@ dev.off()
 
 ## Relative measures instead of absoluate measures
 # Get effect measured in %
-res.rel <- subset(res, type %in% c("baseline", "count_no") & year %in% c(1995, 2018))
-res.rel$type <- ifelse(res.rel$type == "baseline", "b", "c")
-res.rel <- pivot_wider(res.rel, names_from = c("type", "year"), values_from = "share")
-res.rel$rel.effect <- ((res.rel$b_1995 - res.rel$b_2018) - (res.rel$c_1995 - res.rel$c_2018)) / (res.rel$b_1995 - res.rel$b_2018) * 100
-res.rel <- merge(res.rel, index[, c("country", "index")], by = "country", all = TRUE)
-res.rel <- res.rel[, c("country", "ind", "rel.effect", "index")]
+get.rel.effect <- function(res, index, name.eq = "count_no", name.index = "index") {
+  res.18 <- subset(res, type %in% c("baseline", name.eq) & year %in% c(1995, 2018))
+  res.18$type <- ifelse(res.18$type == "baseline", "b", "c")
+  res.18 <- pivot_wider(res.18, names_from = c("type", "year"), values_from = "share")
+  res.18$rel.effect <- ((res.18$b_1995 - res.18$b_2018) - (res.18$c_1995 - res.18$c_2018)) / (res.18$b_1995 - res.18$b_2018) * 100 # In %
+  res.18 <- merge(res.18, index[, c("country", name.index)], by = "country", all = TRUE)
+  res.18 <- res.18[, c("country", "ind", "rel.effect", name.index)]
+  return(res.18)
+}
+
+# Regenerate the income level result
+res.rel.g <- get.rel.effect(res, index, name.eq = "count_only_s", name.index = "glre.g")
+res.rel.g <- add.dev(res.rel.g)
+res.rel.g <- add.gdp(res.rel.g)
+
+res.rel.s <- get.rel.effect(res, index, name.eq = "count_only_g", name.index = "glre.hts")
+res.rel.s <- add.dev(res.rel.s)
+res.rel.s <- add.gdp(res.rel.s)
+
+res.rel <- get.rel.effect(res, index)
+res.rel <- add.dev(res.rel)
+res.rel <- add.gdp(res.rel)
+
+outlier.rel <- function(res.rel) {
+  temp.1 <- length(res.rel$rel.effect)
+  temp.2 <- length(res.rel$rel.effect[abs(res.rel$rel.effect) < 1000])
+  temp.3 <- paste0(res.rel$country[abs(res.rel$rel.effect) > 1000], "-", res.rel$ind[abs(res.rel$rel.effect) > 1000])
+  temp.5 <- paste0("Among ", temp.1, " country-sector observations, ", temp.2, " exhibited relative effects of more than 1000%. The list of the observations with relative effect greater than 1000% is as follows: ", paste(temp.3, collapse = ", "), ". ", "Brunei is excluded due to extremely high GDP per capita.")
+  return(temp.5)
+}
+
+# Write down outliers.
+writeLines(outlier.rel(res.rel.g), "./doc/figures/res_gdp_rel_outliers_g.txt")
+writeLines(outlier.rel(res.rel.s), "./doc/figures/res_gdp_rel_outliers_s.txt")
+writeLines(outlier.rel(res.rel), "./doc/figures/res_gdp_rel_outliers_gs.txt")
+
+res.rel.g <- subset(res.rel.g, abs(rel.effect) < 1000 & country != "BRN")
+res.rel.s <- subset(res.rel.s, abs(rel.effect) < 1000 & country != "BRN")
+res.rel <- subset(res.rel, abs(rel.effect) < 1000 & country != "BRN")
+
+# Three plots together to include in the paper
+plot.index.gdp.3 <- function(res.18, i.ind, i.color, x.lim, y.lim, effect.num) {
+  ylab.inside <- bquote(RelEff[i]^.(effect.num) ~ "(%)")
+
+  themes <- list(theme(text = element_text(size = 15), plot.margin = unit(c(5.5, 6, 5.5, 5.5), "pt")))
+  themes <- append(list(theme_bw(), theme(plot.title = element_text(hjust = 0.5, size = 15))), themes)
+
+  pp <- ggplot(data = subset(res.18, ind == i.ind), aes(x = log(gdppc), y = rel.effect)) +
+    geom_text(aes(label = country), color = i.color) +
+    coord_cartesian(xlim = x.lim, ylim = y.lim, clip = "off") +
+    scale_x_continuous(limits = x.lim, expand = c(0, 0)) +
+    scale_y_continuous(limits = y.lim, expand = c(0, 0)) +
+    geom_smooth(method = "lm", alpha = 0.3, linewidth = 0.5, color = i.color, fullrange = TRUE) +
+    ylab(ylab.inside) +
+    xlab(NULL) +
+    themes +
+    geom_hline(yintercept = 0, linetype = "dotted")
+
+  return(pp)
+}
+
+x.lim.gdp.3 <- c(5.6, 12.0)
+y.lim.gdp.3 <- 1100 * c(-1, 1)
+
+base.plot.gdp.3 <- function(res.18, num.effect.i, out.title) {
+  # Create individual plots with titles
+  p1 <- plot.index.gdp.3(res.18, "G", "black", x.lim.gdp.3, y.lim.gdp.3, num.effect.i) + ggtitle("(i) Goods")
+  p2 <- plot.index.gdp.3(res.18, "HTS", "red", x.lim.gdp.3, y.lim.gdp.3, num.effect.i) + ggtitle("(ii) HTS")
+  p3 <- plot.index.gdp.3(res.18, "BTS", "blue", x.lim.gdp.3, y.lim.gdp.3, num.effect.i) + ggtitle("(iii) BTS")
+
+  return(plot_grid(p1, p2, p3, ncol = 1))
+}
+
+# Run the function with your inputs
+pg1 <- base.plot.gdp.3(res.rel.g, 1)
+pg2 <- base.plot.gdp.3(res.rel.s, 2)
+pg3 <- base.plot.gdp.3(res.rel, 3)
+
+pg4 <- plot_grid(pg1, pg2, pg3, nrow = 1)
+
+# Add individual titles for pg1, pg2, and pg3
+x.title.adj <- 0.031
+
+final_plot <- ggdraw() +
+  draw_label("(a) Effect 1: G", x = 0.17 + x.title.adj, y = 1, vjust = 1.5, size = 16) +
+  draw_label("(b) Effect 2: S", x = 0.5 + x.title.adj, y = 1, vjust = 1.5, size = 16) +
+  draw_label("(c) Effect 3: G & S ", x = 0.83 + x.title.adj, y = 1, vjust = 1.5, size = 16) +
+  draw_plot(pg4, 0, 0.04, 0.99, 0.92) +
+  draw_label("Log(GDP per capita in 1995)", x = 0.531, y = 0, vjust = -2, size = 14)
+
+pdf(file = "./doc/figures/res_gdp_rel.pdf", width = 10, height = 13)
+final_plot
+dev.off()
+
+
+
+
+
+
+
+# Regenerate the main result
+res.rel <- get.rel.effect(res, index)
 
 # There are outliers
 summary(res.rel$rel.effect)
@@ -864,7 +960,6 @@ temp.4 <- paste0(res.rel$country[abs(res.rel$index) > x.lim.num], "-", res.rel$i
 temp.5 <- paste0("Among ", temp.1, " country-sector observations, ", temp.2, " exhibited relative effects of more than 1000% or outlier index values. The list of the observations with relative effect greater than 1000% is as follows: ", paste(temp.3, collapse = ", "), ". ", "The list of observations with outlier index values are as follows: ", paste(temp.4, collapse = ", "), ".")
 
 writeLines(temp.5, "./doc/figures/res_rel_outliers.txt")
-
 
 res.rel.plot <- subset(res.rel, abs(rel.effect) < 1e3 & abs(index) < x.lim.num)
 
