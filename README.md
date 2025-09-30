@@ -57,7 +57,7 @@ Pkg.instantiate()
 
 Now you can automatically generate all results by running Makefile using `GNU Make`. If you are using a Unix-based OS (e.g., Linux, macOS), in your terminal at the subfolder `src`, run `make all`. This command will erase all the results in the `output` and `doc` folders and regenerate them. In this repository, due to storage limitations, the `output` and `doc` folders are intentionally left empty. Running `make all` will populate them with the generated results.
 
-For Windows users, you can either install `GNU Make for Windows` and follow the above steps. Alternatively, you can manually run the code files in the order outlined in `Makefile`. `Makefile` can be opened with text editors.
+For Windows users, you can install `Windows Subsystem for Linux (WSL)` and follow the above steps. Alternatively, you can manually run the code files in the order outlined in `Makefile`. `Makefile` can be opened with text editors.
 
 ## Walkthrough: From Results Back to Code
 
