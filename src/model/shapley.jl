@@ -339,49 +339,14 @@ end
 res_1p = res[abs.(res.tot).>1, :]
 tab_1p = create_summary_table(res[abs.(res.tot).>1, :], digits=1)
 
-# Save the results: CSV, LaTeX, number of observations
-CSV.write("./doc/tables/shapley_1p.csv", tab_1p)
-
-open("./doc/tables/shapley_1p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_1p)).")
-end
-
-open("./doc/tables/shapley_1p.tex", "w") do io
-    pretty_table(io, tab_1p, backend=Val(:latex))
-end
-
 # For 3 percents and 5 percents
 res_3p = res[abs.(res.tot).>3, :]
 tab_3p = create_summary_table(res[abs.(res.tot).>3, :], digits=1)
 
-CSV.write("./doc/tables/shapley_3p.csv", tab_3p)
-
-open("./doc/tables/shapley_3p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_3p)).")
-end
-
-open("./doc/tables/shapley_3p.tex", "w") do io
-    pretty_table(io, tab_3p, backend=Val(:latex))
-end
-
 res_5p = res[abs.(res.tot).>5, :]
 tab_5p = create_summary_table(res[abs.(res.tot).>5, :], digits=1)
 
-CSV.write("./doc/tables/shapley_5p.csv", tab_5p)
-
-open("./doc/tables/shapley_5p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_5p)).")
-end
-
-open("./doc/tables/shapley_5p.tex", "w") do io
-    pretty_table(io, tab_5p, backend=Val(:latex))
-end
-
-
-
-
-
-## Write the results for A and τ's.
+# Write the results for A and τ's.
 function create_summary_table_at(df; digits=1)
     vars = [:r_income, :r_price, :r_nx, :r_io, :r_tot]
     vars_name = ["Income", "Price", "Net-export", "Input-output", "Total"]
@@ -419,43 +384,53 @@ function create_summary_table_at(df; digits=1)
     return result
 end
 
-res_at_1p = res[abs.(res_at.tot).>1, :]
+# Results for 1, 3, and 5 percents
 tab_at_1p = create_summary_table_at(res_at[abs.(res_at.tot).>1, :], digits=1)
-
-# Save the results: CSV, LaTeX, number of observations
-CSV.write("./doc/tables/shapley_at_1p.csv", tab_at_1p)
-
-open("./doc/tables/shapley_at_1p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_at_1p)).")
-end
-
-open("./doc/tables/shapley_at_1p.tex", "w") do io
-    pretty_table(io, tab_at_1p, backend=Val(:latex))
-end
-
-# For 3 p.p. and 5 p.p.
-res_at_3p = res[abs.(res_at.tot).>3, :]
 tab_at_3p = create_summary_table_at(res_at[abs.(res_at.tot).>3, :], digits=1)
-
-CSV.write("./doc/tables/shapley_at_3p.csv", tab_at_3p)
-
-open("./doc/tables/shapley_at_3p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_at_3p)).")
-end
-
-open("./doc/tables/shapley_at_3p.tex", "w") do io
-    pretty_table(io, tab_at_3p, backend=Val(:latex))
-end
-
-res_at_5p = res[abs.(res_at.tot).>5, :]
 tab_at_5p = create_summary_table_at(res_at[abs.(res_at.tot).>5, :], digits=1)
 
-CSV.write("./doc/tables/shapley_at_5p.csv", tab_at_5p)
-
-open("./doc/tables/shapley_at_5p_nobs.txt", "w") do io
-    write(io, "Nobs is $(nrow(res_at_5p)).")
+# Merge the results for two exercises
+function clean_tab_both(tab)
+    insertcols!(tab, 1, :Primitives => "Both")
+    push!(tab, ["Both", "Total", "100.0", "100.0", "100.0", "100.0"])
+    return tab
 end
 
-open("./doc/tables/shapley_at_5p.tex", "w") do io
-    pretty_table(io, tab_at_5p, backend=Val(:latex))
+tab_both_1p = clean_tab_both(tab_1p)
+tab_both_3p = clean_tab_both(tab_3p)
+tab_both_5p = clean_tab_both(tab_5p)
+
+tab_all_1p = vcat(tab_both_1p, tab_at_1p)
+tab_all_3p = vcat(tab_both_3p, tab_at_3p)
+tab_all_5p = vcat(tab_both_5p, tab_at_5p)
+
+# Save the results. CSV, LaTeX, number of observations
+CSV.write("./doc/tables/shapley_all_1p.csv", tab_all_1p)
+
+open("./doc/tables/shapley_all_1p_nobs.txt", "w") do io
+    write(io, "Nobs is $(nrow(res_1p)).")
+end
+
+open("./doc/tables/shapley_all_1p.tex", "w") do io
+    pretty_table(io, tab_all_1p, backend=Val(:latex))
+end
+
+CSV.write("./doc/tables/shapley_all_3p.csv", tab_all_3p)
+
+open("./doc/tables/shapley_all_3p_nobs.txt", "w") do io
+    write(io, "Nobs is $(nrow(res_3p)).")
+end
+
+open("./doc/tables/shapley_all_3p.tex", "w") do io
+    pretty_table(io, tab_all_3p, backend=Val(:latex))
+end
+
+CSV.write("./doc/tables/shapley_all_5p.csv", tab_all_5p)
+
+open("./doc/tables/shapley_all_5p_nobs.txt", "w") do io
+    write(io, "Nobs is $(nrow(res_5p)).")
+end
+
+open("./doc/tables/shapley_all_5p.tex", "w") do io
+    pretty_table(io, tab_all_5p, backend=Val(:latex))
 end

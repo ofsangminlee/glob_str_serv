@@ -2,7 +2,7 @@
 
 This repository contains the source code and data for replicating all results in the paper:
 
-  Lee, Sang Min (2025): “Globalization and Structural Transformation: The Role of Tradable Services”
+  Lee, Sang Min (2026): “Globalization and Structural Transformation: The Role of Tradable Services”
 
 ## Structure
 
@@ -69,7 +69,7 @@ In this section, I explain how the tables and figures in this paper are generate
   - Preference parameters: `/param/preference.R`
   - Production parameters: `/param/production.R`
 - Figure 2: Box Plots for Trade Costs in 1995 and 2018 by Country-group Pairs and Figure 3: GDP per Capita and the Growth Rate of Relative Export Trade Costs: `/param/analyze_tau.R` ← `/param/cal_prd_tau.R`
-- Table 3: Summary Statistics for the Decomposition of Structural Transformation into Four Mechanisms and Table 4: Summary Statistics for the Decomposition of Structural Transformation into Globalization and Productivity Growth: `/model/shapley.jl` ← `/model/run_models.jl` (a model subroutine is in `/model/model.jl`) ← `/model/inputs.jl`  ← Parameters and primitives from codes in `/param/`. 
+- Table 3: Summary Statistics for the Decomposition of Structural Transformation: `/model/shapley.jl` ← `/model/run_models.jl` (a model subroutine is in `/model/model.jl`) ← `/model/inputs.jl`  ← Parameters and primitives from codes in `/param/`. 
 - Figures 4 through 6: Globalization and Structural Transformation of China, Vietnam, Lithuania
   - (a) Dynamics of Sectoral Trade Costs: `/param/analyze_tau.R`
   - (b) Structural Transformation in the Baseline and Counterfactuals #1 to #3: `/model/plot_one.jl` ← `/model/clean_result.jl` ← `/model/run_models.jl`
