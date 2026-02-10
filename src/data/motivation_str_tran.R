@@ -151,6 +151,11 @@ pdf(file = "./doc/figures/str_tran_prd.pdf", width = 10, height = 6)
 str.plot(dat.prod, "Share of GDP", default.color.base, default.shape.base) + facet_wrap(~title.alp)
 dev.off()
 
+# Figure 1 of paper.
+pdf(file = "./doc/figures_jie/gr1.pdf", width = 10, height = 6)
+str.plot(dat.prod, "Share of GDP", default.color.base, default.shape.base) + facet_wrap(~title.alp.stnc)
+dev.off()
+
 ## Country names
 dat.prod.name <- add.name(dat.prod)
 

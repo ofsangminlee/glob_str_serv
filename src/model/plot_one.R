@@ -93,24 +93,41 @@ text.where.china <- rep(list(data.frame(xpos = xpos.mid, ypos = c(0.9, 0.62, 0.2
 plot.all.country <- function(res, ex.country, text.where, list.titles) {
   pp <- plot.all(res, ex.country, text.where, list.titles)
   x.grob <- textGrob("Year", gp = gpar(fontsize = 15))
-  grid.arrange(arrangeGrob(pp, bottom = x.grob))
+  return(arrangeGrob(pp, bottom = x.grob))
 }
 
 # Baseline
 pdf(file = "./doc/figures/single_chn.pdf", width = 10, height = 6)
-plot.all.country(res, "CHN", text.where.china, list.titles.paper)
+p_chn <- plot.all.country(res, "CHN", text.where.china, list.titles.paper)
+grid.draw(p_chn)
+dev.off()
+
+title.b <- "(b) Structural transformation in the baseline and counterfactuals #1 to #3"
+
+# Journal figure 4b
+pdf(file = "./doc/figures_jie/gr4b.pdf", width = 10, height = 6)
+p_chn <- plot.all.country(res, "CHN", text.where.china, list.titles.paper)
+print(add_main_title(p_chn, title.b))
 dev.off()
 
 # H-S case
 pdf(file = "./doc/figures/single_chn_hs.pdf", width = 10, height = 6)
-plot.all.country(res.hs, "CHN", text.where.china, list.titles.paper)
+p_chn_hs <- plot.all.country(res.hs, "CHN", text.where.china, list.titles.paper)
+grid.draw(p_chn_hs)
+dev.off()
+
+# Journal figure 4b
+pdf(file = "./doc/figures_jie/gr9b.pdf", width = 10, height = 6)
+p_chn <- plot.all.country(res.hs, "CHN", text.where.china, list.titles.paper)
+print(add_main_title(p_chn, title.b))
 dev.off()
 
 # India
 text.where.india <- rep(list(data.frame(xpos = xpos.mid, ypos = c(0.85, 0.57, 0.2), name = short.name.inds)), 4)
 
 pdf(file = "./doc/figures/single_ind.pdf", width = 10, height = 6)
-plot.all.country(res, "IND", text.where.india, list.titles.paper)
+p_ind <- plot.all.country(res, "IND", text.where.india, list.titles.paper)
+grid.draw(p_ind)
 dev.off()
 
 # Vietname and Lithuania
@@ -126,7 +143,13 @@ text.where.vietnam <- make.diff.loc(list(
 ))
 
 pdf(file = "./doc/figures/single_vnm.pdf", width = 10, height = 6)
-plot.all.country(res, "VNM", text.where.vietnam, list.titles.paper)
+p_vnm <- plot.all.country(res, "VNM", text.where.vietnam, list.titles.paper)
+grid.draw(p_vnm)
+dev.off()
+
+pdf(file = "./doc/figures_jie/gr5b.pdf", width = 10, height = 6)
+p_vnm <- plot.all.country(res, "VNM", text.where.vietnam, list.titles.paper)
+print(add_main_title(p_vnm, title.b))
 dev.off()
 
 text.where.lithuania <- make.diff.loc(list(
@@ -137,5 +160,11 @@ text.where.lithuania <- make.diff.loc(list(
 ))
 
 pdf(file = "./doc/figures/single_ltu.pdf", width = 10, height = 6)
-pp <- plot.all.country(res, "LTU", text.where.lithuania, list.titles.paper)
+p_ltu <- plot.all.country(res, "LTU", text.where.lithuania, list.titles.paper)
+grid.draw(p_ltu)
+dev.off()
+
+pdf(file = "./doc/figures_jie/gr6b.pdf", width = 10, height = 6)
+p_ltu <- plot.all.country(res, "LTU", text.where.lithuania, list.titles.paper)
+print(add_main_title(p_ltu, title.b))
 dev.off()

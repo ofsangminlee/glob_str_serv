@@ -28,6 +28,7 @@ clean_output_files:
 clean_figures_tables:
 	@echo "---Deleting figures and tables---"
 	@cd ./doc/figures && find ./ -type f -delete
+	@cd ./doc/figures_jie && find ./ -type f -delete
 	@cd ./doc/tables && find ./ -type f -delete	
 	@cd ./doc/numbers && find ./ -type f -delete	
 

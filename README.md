@@ -63,23 +63,25 @@ For Windows users, you can install `Windows Subsystem for Linux (WSL)` and follo
 
 In this section, I explain how the tables and figures in this paper are generated through code. Where helpful, I illustrate the sequence of codes in the reverse order. All referenced source files are in the `./src/` directory.
 
-- Table 1: Classification of Industries into Three Sectors: `/data/motivation_two_services.R`
-- Figure 1: Sectoral Shares in Production of Country-years by Per-Capita Real Income: `/data/motivation_str_tran.R`
-- Table 2: Parameter Values:
-  - Preference parameters: `/param/preference.R`
-  - Production parameters: `/param/production.R`
-- Figure 2: Box Plots for Trade Costs in 1995 and 2018 by Country-group Pairs and Figure 3: GDP per Capita and the Growth Rate of Relative Export Trade Costs: `/param/analyze_tau.R` ← `/param/cal_prd_tau.R`
-- Table 3: Summary Statistics for the Decomposition of Structural Transformation: `/model/shapley.jl` ← `/model/run_models.jl` (a model subroutine is in `/model/model.jl`) ← `/model/inputs.jl`  ← Parameters and primitives from codes in `/param/`. 
-- Figures 4 through 6: Globalization and Structural Transformation of China, Vietnam, Lithuania
+### Figures
+- **Fig. 1.** Sectoral Shares in Production of Country-years by Per-Capita Real Income: `/data/motivation_str_tran.R`
+- **Fig. 2.** Box Plots for Trade Costs in 1995 and 2018 by Country-Group Pairs and **Fig. 3**: GDP per Capita and the Growth Rate of Relative Export Trade Costs: `/param/analyze_tau.R` ← `/param/cal_prd_tau.R`
+- **Fig. 4-6.** Globalization and Structural Transformation of China, Vietnam, and Lithuania
   - (a) Dynamics of Sectoral Trade Costs: `/param/analyze_tau.R`
   - (b) Structural Transformation in the Baseline and Counterfactuals #1 to #3: `/model/plot_one.jl` ← `/model/clean_result.jl` ← `/model/run_models.jl`
-- Figure 7: GDP per Capita and the Effects of Globalization in (a) Goods, (b) Services, and (c) All Sectors on Structural Transformation and Figure 8: Globalization Bias Index and the Effects of Globalization in All Sectors on Structural Transformation: `/model/plot_67.jl` ← `/model/clean_result.jl` ← `/model/run_models.jl`
-- Table 5: Summary Statistics for the Absolute Values of the Effect of Globalization in the Main, Non-tradable Services, Symmetric Trade Cost Models: `/model/plot_67.jl` (This function says "plot" but it also generates tables as well.)
-- Figure 9: Results for China (Model with Symmetric Trade Costs):
+- **Fig. 7.** GDP per Capita and the Effects of Globalization in (a) Goods, (b) Services, and (c) All Sectors on Structural Transformation and **Fig. 8.** Globalization Bias Index and the Effects of Globalization in All Sectors on Structural Transformation: `/model/plot_67.jl` ← `/model/clean_result.jl` ← `/model/run_models.jl`
+- **Fig. 9.** Results for China (Model with Symmetric Trade Costs):
   - (a) Dynamics of Sectoral Trade Costs:  `/param/analyze_tau.R` ← `/param/cal_tau_head_ries.R` 
   - (b) Structural Transformation in the Baseline and Counterfactuals #1 to #3: `/model/plot_one.jl` ← `/model/clean_result.jl` ← `/model/run_models.jl`
-- Table 6: Estimation Results for the Dynamics of Trade Costs and Productivities: `/param/prd_tau_interaction.R`
-- Figure 10: Results from the Model with Spillover Effects: `/model/plot_67.jl`
-- Tables in Appendix D (Estimation): `/param/preference.R` and `/param/production.R`
-- Figures in Appendix E (Productivity Growth): `/model/analyze_prd.R` ← `/model/clean_result.jl` ← `/model/run_models.jl` (To calculate labor productivity, I need to solve for the baseline equilibrium.)
-- Figures in Appendix G. (Model Fit, Non-targeted Moments): `/model/plot_usa_row.R` ← `/model/run_usa_row.jl`
+- **Fig. E.1.** Growth Factors of Sectoral Productivities and Relative Prices: `/model/analyze_prd.R` ← `/model/clean_result.jl` ← `/model/run_models.jl` (To calculate labor productivity, I need to solve for the baseline equilibrium.)
+- **Fig. G.1.** Model Fit (Structural Transformation of the US, Non-targeted): `/model/plot_usa_row.R` ← `/model/run_usa_row.jl`
+
+### Tables
+- **Table 1.** Classification of Industries into Three Sectors: `/data/motivation_two_services.R`
+- **Table 2.** Parameter Values:
+  - Preference parameters: `/param/preference.R`
+  - Production parameters: `/param/production.R`
+- **Table 3.** Summary Statistics for the Decomposition: `/model/shapley.jl` ← `/model/run_models.jl` (a model subroutine is in `/model/model.jl`) ← `/model/inputs.jl`  ← Parameters and primitives from codes in `/param/`. 
+- **Table 4.** Summary Statistics for the Absolute Values of the Effect of Globalization in the Main, Non-tradable-Services, and Symmetric-Trade-Cost Models: `/model/plot_67.jl` (This function says "plot" but it also generates tables as well.)
+- **Table 5.** Estimation Results for the Dynamics of Trade Costs and Productivities: `/param/prd_tau_interaction.R`
+- **Tables D.1-2.** Estimation Results for Preference and Production Parameters: `/param/preference.R` and `/param/production.R`

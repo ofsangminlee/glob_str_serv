@@ -29,11 +29,17 @@ no.s <- clean.result(no.s, "NT")
 res <- rbind(dat, base, no.s)
 
 res.plot <- subset(res, country == "USA")
-res.plot$ind <- ifelse(res.plot$ind == "g", "(a) Goods", ifelse(res.plot$ind == "hts", "(b) Highly Tradable Services", "(c) Barely Tradable Services"))
+
+res.plot$ind.orig <- res.plot$ind
+
+res.plot$ind <- ifelse(res.plot$ind.orig == "g", "(a) Goods", ifelse(res.plot$ind.orig == "hts", "(b) Highly Tradable Services", "(c) Barely Tradable Services"))
 res.plot$ind <- factor(res.plot$ind, levels = c("(a) Goods", "(b) Highly Tradable Services", "(c) Barely Tradable Services"))
 
 res.plot$ind.2 <- substr(as.character(res.plot$ind), 5, nchar(as.character(res.plot$ind)))
 res.plot$ind.2 <- factor(res.plot$ind.2, levels = c("Goods", "Highly Tradable Services", "Barely Tradable Services"))
+
+res.plot$ind.stnc <- ifelse(res.plot$ind.orig == "g", "(a) Goods", ifelse(res.plot$ind.orig == "hts", "(b) Highly tradable services", "(c) Barely tradable services"))
+res.plot$ind.stnc <- factor(res.plot$ind.stnc, levels = c("(a) Goods", "(b) Highly tradable services", "(c) Barely tradable services"))
 
 pp <- ggplot(data = res.plot, aes(x = year, y = share, by = type, color = ind.2)) +
   geom_point(aes(shape = type), size = 2) +
@@ -63,6 +69,30 @@ pp.paper +
       ind == "(a) Goods" ~ scale_y_continuous(limits = c(0.15, 0.23), breaks = seq(0.15, 0.23, 0.01)),
       ind == "(b) Highly Tradable Services" ~ scale_y_continuous(limits = c(0.38, 0.44), breaks = seq(0.38, 0.44, 0.01)),
       ind == "(c) Barely Tradable Services" ~ scale_y_continuous(limits = c(0.37, 0.42), breaks = seq(0.37, 0.42, 0.01))
+    )
+  )
+dev.off()
+
+## Figure G.1. for the paper
+
+pp.paper.stnc <- ggplot(data = res.plot, aes(x = year, y = share, by = type, color = ind.stnc)) +
+  geom_point(aes(shape = type), size = 2) +
+  geom_line(aes(linetype = type), linewidth = 1) +
+  geom_dl(aes(label = type), method = list(dl.trans(x = x + 0.2), "last.points", cex = 1)) +
+  scale_x_continuous(limits = c(1995, 2022), breaks = seq(1995, 2015, 5)) +
+  scale_color_manual(values = c("(a) Goods" = "black", "(b) Highly tradable services" = "red", "(c) Barely tradable services" = "blue")) +
+  labs(x = "Year", y = "Share of GDP") +
+  facet_wrap(~ind.stnc, scales = "free") +
+  theme_bw() +
+  theme(legend.position = "none", strip.text = element_text(size = 13), text = element_text(size = 13), axis.text = element_text(size = 9), strip.background = element_blank())
+
+pdf("./doc/figures_jie/gr11.pdf", width = 10, height = 6)
+pp.paper.stnc +
+  facetted_pos_scales(
+    y = list(
+      ind.stnc == "(a) Goods" ~ scale_y_continuous(limits = c(0.15, 0.23), breaks = seq(0.15, 0.23, 0.01)),
+      ind.stnc == "(b) Highly tradable services" ~ scale_y_continuous(limits = c(0.38, 0.44), breaks = seq(0.38, 0.44, 0.01)),
+      ind.stnc == "(c) Barely tradable services" ~ scale_y_continuous(limits = c(0.37, 0.42), breaks = seq(0.37, 0.42, 0.01))
     )
   )
 dev.off()

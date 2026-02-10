@@ -333,6 +333,30 @@ dev.off()
 
 write.csv(res.18, "./doc/figures/res_base.csv", row.names = FALSE)
 
+## Figure 8 (sentence case) for the journal version
+base.plot <- function(res.18, lm.line.2 = TRUE, outlier.countries.2 = c("SAU", "BRN", "LUX")) {
+  p1 <- plot.index.no.arrow(res.18, "G", "black", x.lim, y.lim, paper = TRUE, lm.line = lm.line.2, outlier.countries = outlier.countries.2) + ggtitle("(a) Goods") +
+    draw.arrows.paper +
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
+    annotate.arrow.y(pp.yarrow.x.loc, pp.yarrow.y.loc, "da", "from", "G", ffsize = 12)
+
+  p2 <- plot.index.no.arrow(res.18, "HTS", "red", x.lim, y.lim, paper = TRUE, lm.line = lm.line.2, outlier.countries = outlier.countries.2) + ggtitle("(b) Highly tradable services") +
+    draw.arrows.paper +
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
+    annotate.arrow.y(pp.yarrow.x.loc, pp.yarrow.y.loc, "ad", "to", "HTS", ffsize = 12)
+
+  p3 <- plot.index.no.arrow(res.18, "BTS", "blue", x.lim, y.lim, paper = TRUE, lm.line = lm.line.2, outlier.countries = outlier.countries.2) + ggtitle("(c) Barely tradable services") +
+    draw.arrows.paper +
+    annotate.arrow.x(pp.xarrow.left, pp.xarrow.right, ffsize = 12) +
+    annotate.arrow.y(pp.yarrow.x.loc, pp.yarrow.y.loc, "ad", "to", "BTS", ffsize = 12)
+
+  plot_grid(p1, p2, p3, ncol = 1)
+}
+
+pdf(file = "./doc/figures_jie/gr8.pdf", width = 10, height = 13)
+base.plot(res.18)
+dev.off()
+
 # Function to write outlier information to file
 write.outliers <- function(outlier_countries) {
   if (length(outlier_countries) == 0) {
@@ -839,6 +863,11 @@ final_plot <- ggdraw() +
   draw_label("Log(GDP per capita in 1995)", x = 0.531, y = 0, vjust = -2, size = 14)
 
 pdf(file = "./doc/figures/res_gdp.pdf", width = 10, height = 13)
+final_plot
+dev.off()
+
+## Figure 7 in the paper
+pdf(file = "./doc/figures_jie/gr7.pdf", width = 10, height = 13)
 final_plot
 dev.off()
 

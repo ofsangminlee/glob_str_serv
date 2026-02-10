@@ -179,6 +179,11 @@ pdf(file = "./doc/figures/tau_box.pdf", width = 10, height = 6)
 plot.boxes.color(tau.plot, c(0, 24)) + plot.boxes.options() + guides(fill = guide_none()) + facet_wrap(~title.alp)
 dev.off()
 
+# Figure 2 of paper.
+pdf(file = "./doc/figures_jie/gr2.pdf", width = 10, height = 6)
+plot.boxes.color(tau.plot, c(0, 24)) + plot.boxes.options() + guides(fill = guide_none()) + facet_wrap(~title.alp.stnc)
+dev.off()
+
 pdf(file = "./doc/figures/tau_box_hs.pdf", width = 10, height = 6)
 plot.boxes.color(tau.plot.hs, c(0, 24)) + plot.boxes.options() + guides(fill = guide_none()) + facet_wrap(~title.alp)
 dev.off()
@@ -418,6 +423,20 @@ pdf(file = "./doc/figures/tau_cty_chn_hs.pdf", width = 10, height = 5)
 plot.one.paper.hs("CHN", adjust.grid.b = TRUE, y.limits.1.b = c(1, 14), y.limits.2.b = c(-0.4, 2.2))
 dev.off()
 
+title.a <- "(a) Dynamics of sectoral trade costs"
+
+# Plot 4a for the journal version
+pdf(file = "./doc/figures_jie/gr4a.pdf", width = 10, height = 5)
+p_chn <- plot.one.paper("CHN", adjust.grid.b = TRUE, y.limits.1.b = c(1, 14), y.limits.2.b = c(-0.4, 2.2))
+print(add_main_title(p_chn, title.a))
+dev.off()
+
+# Plot 9a for the journal version
+pdf(file = "./doc/figures_jie/gr9a.pdf", width = 10, height = 5)
+p_chn_hs <- plot.one.paper.hs("CHN", adjust.grid.b = TRUE, y.limits.1.b = c(1, 14), y.limits.2.b = c(-0.4, 2.2))
+print(add_main_title(p_chn_hs, title.a))
+dev.off()
+
 ## China result print out
 write.csv(subset(dat.plot.tau.weighted.hs, country == "CHN" & year %in% c(1995, 2018) & ind %in% c("G", "HTS")), "./doc/numbers/tau_cty_china_tau_hs.csv", row.names = FALSE)
 
@@ -431,10 +450,23 @@ pdf(file = "./doc/figures/tau_cty_vnm.pdf", width = 10, height = 5)
 plot.one.paper("VNM")
 dev.off()
 
+## Plot 5a for the journal version
+pdf(file = "./doc/figures_jie/gr5a.pdf", width = 10, height = 5)
+p_vnm <- plot.one.paper("VNM")
+print(add_main_title(p_vnm, title.a))
+dev.off()
+
 ## Plot (Lithuania)
 pdf(file = "./doc/figures/tau_cty_ltu.pdf", width = 10, height = 5)
 plot.one.paper("LTU")
 dev.off()
+
+## Plot 6a for the journal version
+pdf(file = "./doc/figures_jie/gr6a.pdf", width = 10, height = 5)
+p_ltu <- plot.one.paper("LTU")
+print(add_main_title(p_ltu, title.a))
+dev.off()
+
 
 ##############################
 ## Globalization Bias index ##
@@ -525,6 +557,13 @@ pdf(file = "./doc/figures/tau_asymmetry_dynamics.pdf", width = 10, height = 6)
 asym.dyn.plot(plot.ind) +
   plot.scatter.options(bw = TRUE) +
   facet_wrap(~title.alp)
+dev.off()
+
+# Figure 3 of the paper
+pdf(file = "./doc/figures_jie/gr3.pdf", width = 10, height = 6)
+asym.dyn.plot(plot.ind) +
+  plot.scatter.options(bw = TRUE) +
+  facet_wrap(~title.alp.stnc)
 dev.off()
 
 pdf(file = "./doc/figures/tau_asymmetry_dynamics_low.pdf", width = 10, height = 6)

@@ -102,13 +102,13 @@ c.la.paper <- c.la
 c.la.paper$title.rom <- shorten.title(c.la.paper$title.rom)
 
 # Plotting
-plot.prd <- function(a, bw.2 = TRUE, y.lab = "Quartiles", type.title = "title") {
+plot.prd <- function(a, bw.2 = TRUE, y.lab = "Quartiles", type.title = "title", size.cex = 1.5) {
   ggplot(data = a, aes(x = year, y = value, by = type)) +
     geom_point(aes(shape = type, color = ind), size = 2) +
     geom_line(aes(linetype = type, color = ind)) +
     scale_color_manual(values = default.color.base) +
     facet_wrap(as.formula(paste0("~", type.title))) +
-    geom_dl(aes(label = type, color = ind), method = list(dl.trans(x = x + 0.2), "last.points", cex = 1.5)) +
+    geom_dl(aes(label = type, color = ind), method = list(dl.trans(x = x + 0.2), "last.points", cex = size.cex)) +
     labs(y = y.lab, x = "Year") +
     plot.time.options.big(x.limits = c(1995, 2022), bw = bw.2)
 }
@@ -128,8 +128,6 @@ dev.off()
 pdf(file = "./doc/figures/prd_lp_gr.pdf", width = 10, height = 6)
 plot.prd(c.g.la.paper, y.lab = "Quartiles (growth factor of LP)", type.title = "title.rom")
 dev.off()
-
-
 
 
 
@@ -168,13 +166,13 @@ sum.g.relp <- merge(sum.g.relp, two.sec.title, by = "ind", all.x = TRUE)
 
 sum.g.relp$title <- factor(sum.g.relp$title, levels = c("Highly Tradable Services", "Barely Tradable Services"))
 
-plot.relp <- function(sum.relp, bw.2 = TRUE, y.lab = "Quartiles", type.title = "title") {
+plot.relp <- function(sum.relp, bw.2 = TRUE, y.lab = "Quartiles", type.title = "title", size.cex = 1.5) {
   ggplot(data = sum.relp, aes(x = year, y = value, by = type)) +
     geom_point(aes(shape = type, color = ind), size = 2) +
     geom_line(aes(linetype = type, color = ind)) +
     scale_color_manual(values = default.color.base) +
     facet_wrap(as.formula(paste0("~", type.title)), scale = "free") +
-    geom_dl(aes(label = type, color = ind), method = list(dl.trans(x = x + 0.2), "last.points", cex = 1.5)) +
+    geom_dl(aes(label = type, color = ind), method = list(dl.trans(x = x + 0.2), "last.points", cex = size.cex)) +
     labs(y = y.lab, x = "Year") +
     plot.time.options.big(x.limits = c(1995, 2020), bw = bw.2)
 }
@@ -199,3 +197,31 @@ writeLines(paste0(
   "The number of countries, where prices of BTS and HTS relative to G fell is ", sum(g.relp.18$bts < 1), " and ", sum(g.relp.18$hts < 1), ". ",
   "The number of countries, where labor productivity was faster in BTS and HTS compared to G, is ", sum(g.rela.18$bts > g.rela.18$g), " and ", sum(g.rela.18$hts > g.rela.18$g), "."
 ), "./doc/numbers/prd_counts.txt")
+
+
+# Custom size overrides
+i.scale <- 1.5
+
+custom_sizes <- theme(
+  axis.text = element_text(size = 10 * i.scale), # Size of axis numbers (1995, 2000...)
+  axis.title = element_text(size = 14 * i.scale), # Size of axis labels (Year, Quartiles)
+  strip.text = element_text(size = 14 * i.scale), # Size of panel titles ((i) Goods, etc.)
+  plot.title = element_text(hjust = 0.5, size = 16 * i.scale) # Main title centered
+)
+
+# Figure E.1 in the paper
+pdf(file = "./doc/figures_jie/gr10a.pdf", width = 10, height = 6)
+p_a <- plot.prd(c.g.a.paper, y.lab = "Quartiles (growth factor of TFP)", type.title = "title.rom", size.cex = 1.5)
+# Apply the + operation here
+print(p_a + ggtitle("(a) TFP") + custom_sizes)
+dev.off()
+
+pdf(file = "./doc/figures_jie/gr10b.pdf", width = 10, height = 6)
+p_b <- plot.prd(c.g.la.paper, y.lab = "Quartiles (growth factor of LP)", type.title = "title.rom", size.cex = 1.5)
+print(p_b + ggtitle("(b) Labor productivity") + custom_sizes)
+dev.off()
+
+pdf(file = "./doc/figures_jie/gr10c.pdf", width = 10, height = 6)
+p_c <- plot.relp(sum.g.relp, y.lab = "Quartiles (growth factor of relative prices)", type.title = "title.rom", size.cex = 1.5)
+print(p_c + ggtitle("(c) Relative prices of services to goods") + custom_sizes)
+dev.off()
