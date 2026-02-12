@@ -34,7 +34,7 @@ Before running the code, there are four preliminary steps.
 git clone https://github.com/ofsangminlee/glob-str-serv.git
 ```
 
-2. Download the five zip files for the ICIO data from the Google Drive folder (<https://drive.google.com/drive/folders/1coLnNmdi6E8BjIB3mcB5Maf48WILAKHt?usp=share_link>). Place the five zip files in the `data/icio` directory.
+2. Download the ICIO data: Go to the Mendeley Data replication package (<https://doi.org/10.17632/gsns89xszt.1>). Navigate to `glob_str_serv_replication/data/icio/`. Download the five zip files (`ICIO_1995-1999.zip` through `ICIO_2015-2018.zip`) and place them in this repository’s `data/icio/` directory.
 
 The code is in `R` and `Julia`.
 
