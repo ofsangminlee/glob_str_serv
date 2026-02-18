@@ -2,7 +2,7 @@
 
 This repository contains the source code and data for replicating all results in the paper:
 
-  Lee, Sang Min (2026): “Globalization and Structural Transformation: The Role of Tradable Services”
+  Lee, Sang Min (2026): “Globalization and Structural Transformation: The Role of Tradable Services,” Journal of International Economics. (<https://doi.org/10.1016/j.jinteco.2026.104220>)
 
 ## Structure
 
